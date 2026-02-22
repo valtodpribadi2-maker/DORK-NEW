@@ -1,1 +1,365 @@
-
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dork Search Pro - AI Powered</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-search"></i>
+                <h2>Dork<span>Pro</span></h2>
+            </div>
+            
+            <div class="menu">
+                <div class="menu-item active" data-tab="search">
+                    <i class="fas fa-search"></i>
+                    <span>Dork Search</span>
+                </div>
+                <div class="menu-item" data-tab="ai">
+                    <i class="fas fa-robot"></i>
+                    <span>AI Analysis</span>
+                </div>
+                <div class="menu-item" data-tab="history">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
+                </div>
+                <div class="menu-item" data-tab="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </div>
+            </div>
+            
+            <div class="api-status" id="apiStatus">
+                <i class="fas fa-circle"></i>
+                <span>Groq AI: Disconnected</span>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Search Tab -->
+            <div id="searchTab" class="tab active">
+                <div class="header">
+                    <h1>🔍 Advanced Dork Search</h1>
+                    <p>Search for NIK, KK, Address, Email, Phone Number using Google Dorks</p>
+                </div>
+                
+                <div class="search-container">
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label><i class="fas fa-id-card"></i> NIK</label>
+                            <input type="text" id="nik" placeholder="Masukkan NIK (16 digit)">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label><i class="fas fa-users"></i> Nomor KK</label>
+                            <input type="text" id="kk" placeholder="Masukkan Nomor KK">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label><i class="fas fa-user"></i> Nama Lengkap</label>
+                            <input type="text" id="nama" placeholder="Masukkan Nama Lengkap">
+                        </div>
+                        
+                        <div class="input-group full-width">
+                            <label><i class="fas fa-map-marker-alt"></i> Alamat</label>
+                            <textarea id="alamat" rows="2" placeholder="Masukkan Alamat Lengkap"></textarea>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label><i class="fas fa-envelope"></i> Email</label>
+                            <input type="email" id="email" placeholder="email@domain.com">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label><i class="fas fa-phone"></i> Nomor HP</label>
+                            <input type="text" id="hp" placeholder="08xxxxxxxxxx">
+                        </div>
+                    </div>
+                    
+                    <div class="search-options">
+                        <div class="option-group">
+                            <label>Jenis Dork:</label>
+                            <select id="dorkType">
+                                <option value="nik">NIK (KTP)</option>
+                                <option value="kk">KK (Kartu Keluarga)</option>
+                                <option value="alamat">Alamat</option>
+                                <option value="email">Email</option>
+                                <option value="hp">Nomor HP</option>
+                                <option value="kombinasi">Kombinasi Semua</option>
+                            </select>
+                        </div>
+                        
+                        <div class="option-group">
+                            <label>Search Engine:</label>
+                            <select id="searchEngine">
+                                <option value="google">Google</option>
+                                <option value="bing">Bing</option>
+                                <option value="yandex">Yandex</option>
+                                <option value="duckduckgo">DuckDuckGo</option>
+                            </select>
+                        </div>
+                        
+                        <div class="option-group">
+                            <label>Max Results:</label>
+                            <select id="maxResults">
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button id="generateDorkBtn" class="btn primary">
+                            <i class="fas fa-code"></i> Generate Dorks
+                        </button>
+                        <button id="searchBtn" class="btn success">
+                            <i class="fas fa-search"></i> Search All
+                        </button>
+                        <button id="aiAnalyzeBtn" class="btn ai">
+                            <i class="fas fa-robot"></i> Analyze with AI
+                        </button>
+                        <button id="clearBtn" class="btn secondary">
+                            <i class="fas fa-eraser"></i> Clear
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="results-container">
+                    <div class="results-header">
+                        <h3><i class="fas fa-list"></i> Generated Dorks</h3>
+                        <div class="results-actions">
+                            <span id="dorkCount">0 dorks</span>
+                            <button id="copyAllBtn" class="icon-btn"><i class="fas fa-copy"></i></button>
+                            <button id="exportBtn" class="icon-btn"><i class="fas fa-download"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div id="dorkList" class="dork-list">
+                        <!-- Dorks will be displayed here -->
+                    </div>
+                </div>
+                
+                <div class="search-results">
+                    <div class="results-header">
+                        <h3><i class="fas fa-globe"></i> Search Results</h3>
+                        <div class="results-actions">
+                            <span id="resultCount">0 results</span>
+                            <button id="openAllBtn" class="icon-btn"><i class="fas fa-external-link-alt"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div id="searchResults" class="results-grid">
+                        <!-- Search results will be displayed here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Analysis Tab -->
+            <div id="aiTab" class="tab">
+                <div class="header">
+                    <h1>🤖 AI-Powered Analysis</h1>
+                    <p>Analyze search results using Groq AI (Llama 3, Mixtral, Gemma)</p>
+                </div>
+                
+                <div class="ai-container">
+                    <div class="ai-sidebar">
+                        <div class="ai-config">
+                            <h3>Groq Configuration</h3>
+                            
+                            <div class="input-group">
+                                <label>API Key:</label>
+                                <input type="password" id="groqApiKey" placeholder="Enter Groq API Key">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label>Model:</label>
+                                <select id="aiModel">
+                                    <option value="llama-3.3-70b-versatile">Llama 3.3 70B</option>
+                                    <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
+                                    <option value="gemma2-9b-it">Gemma 2 9B</option>
+                                    <option value="llama3-70b-8192">Llama 3 70B</option>
+                                    <option value="llama3-8b-8192">Llama 3 8B</option>
+                                </select>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label>Temperature:</label>
+                                <input type="range" id="temperature" min="0" max="2" step="0.1" value="0.7">
+                                <span id="tempValue">0.7</span>
+                            </div>
+                            
+                            <button id="connectGroqBtn" class="btn primary">
+                                <i class="fas fa-plug"></i> Connect Groq
+                            </button>
+                        </div>
+                        
+                        <div class="analysis-presets">
+                            <h4>Quick Analysis</h4>
+                            <button class="preset-btn" data-prompt="Summarize all findings from these search results">
+                                Summarize
+                            </button>
+                            <button class="preset-btn" data-prompt="Extract all NIK numbers found in these results">
+                                Extract NIK
+                            </button>
+                            <button class="preset-btn" data-prompt="Find all email addresses in these results">
+                                Extract Emails
+                            </button>
+                            <button class="preset-btn" data-prompt="List all phone numbers found">
+                                Extract Phone Numbers
+                            </button>
+                            <button class="preset-btn" data-prompt="Identify potential data leaks or sensitive information">
+                                Find Data Leaks
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="ai-main">
+                        <div class="ai-input">
+                            <textarea id="aiPrompt" placeholder="Enter your analysis prompt or select from presets..." rows="3"></textarea>
+                            <button id="analyzeBtn" class="btn ai">
+                                <i class="fas fa-brain"></i> Analyze
+                            </button>
+                        </div>
+                        
+                        <div class="ai-response">
+                            <div class="response-header">
+                                <h3>Analysis Result</h3>
+                                <button id="copyResponseBtn" class="icon-btn"><i class="fas fa-copy"></i></button>
+                            </div>
+                            <div id="analysisResult" class="analysis-content">
+                                <!-- AI response will be displayed here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- History Tab -->
+            <div id="historyTab" class="tab">
+                <div class="header">
+                    <h1>📜 Search History</h1>
+                    <p>Your previous dork searches and analyses</p>
+                </div>
+                
+                <div class="history-container">
+                    <div class="history-filters">
+                        <input type="text" id="historySearch" placeholder="Search history...">
+                        <select id="historyFilter">
+                            <option value="all">All</option>
+                            <option value="dork">Dork Searches</option>
+                            <option value="ai">AI Analyses</option>
+                        </select>
+                        <button id="clearHistoryBtn" class="btn secondary">
+                            <i class="fas fa-trash"></i> Clear History
+                        </button>
+                    </div>
+                    
+                    <div id="historyList" class="history-list">
+                        <!-- History items will be displayed here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Settings Tab -->
+            <div id="settingsTab" class="tab">
+                <div class="header">
+                    <h1>⚙️ Settings</h1>
+                    <p>Configure your dork search preferences</p>
+                </div>
+                
+                <div class="settings-container">
+                    <div class="settings-group">
+                        <h3>General Settings</h3>
+                        
+                        <div class="setting-item">
+                            <label>Default Search Engine:</label>
+                            <select id="defaultEngine">
+                                <option value="google">Google</option>
+                                <option value="bing">Bing</option>
+                                <option value="yandex">Yandex</option>
+                                <option value="duckduckgo">DuckDuckGo</option>
+                            </select>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label>Default Max Results:</label>
+                            <select id="defaultResults">
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label>Save Search History:</label>
+                            <input type="checkbox" id="saveHistory" checked>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h3>Dork Templates</h3>
+                        <p class="setting-note">Customize your dork templates for each data type</p>
+                        
+                        <div class="template-editor">
+                            <select id="templateType">
+                                <option value="nik">NIK</option>
+                                <option value="kk">KK</option>
+                                <option value="alamat">Alamat</option>
+                                <option value="email">Email</option>
+                                <option value="hp">Nomor HP</option>
+                            </select>
+                            
+                            <textarea id="templateText" rows="4"></textarea>
+                            <button id="saveTemplateBtn" class="btn primary">Save Template</button>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h3>Export/Import</h3>
+                        
+                        <div class="export-buttons">
+                            <button id="exportSettingsBtn" class="btn secondary">
+                                <i class="fas fa-download"></i> Export Settings
+                            </button>
+                            <button id="importSettingsBtn" class="btn secondary">
+                                <i class="fas fa-upload"></i> Import Settings
+                            </button>
+                            <button id="exportHistoryBtn" class="btn secondary">
+                                <i class="fas fa-history"></i> Export History
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h3>About</h3>
+                        <p>Dork Search Pro v4.0</p>
+                        <p>Powered by Groq AI for intelligent analysis</p>
+                        <p>Created for educational and research purposes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loader"></div>
+        <p id="loadingMessage">Processing...</p>
+    </div>
+    
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
